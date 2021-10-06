@@ -23,6 +23,10 @@ class ArticleView extends StatelessWidget {
                 )
               : ListView.builder(
                   itemBuilder: (ctx, index) => ListTile(
+                    onTap: () {
+                      AppRoute.navigateToSingleArticle(
+                          _controller.articles[index].articleId);
+                    },
                     title: Text(_controller.articles[index].title),
                   ),
                   itemCount: _controller.articles.length,

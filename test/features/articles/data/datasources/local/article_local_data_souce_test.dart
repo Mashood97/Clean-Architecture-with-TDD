@@ -72,7 +72,7 @@ void main() {
           .getAllArticleByIdFromLocal(tArticleId);
 
       //assert
-      verify(() => mockSharedPreferences.getString("CACHED_SINGLE_ARTICLE"));
+      verify(() => mockSharedPreferences.getString("CACHED_ALL_ARTICLES"));
       expect(result, equals(singleArticle));
     });
 
