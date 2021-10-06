@@ -24,7 +24,10 @@ class ArticleRemoteDataSourceImpl implements ArticleRemoteDataSourceRepository {
     );
 
     if (response.statusCode == 200) {
-      var decode = json.decode(response.data);
+      var decode = response.data;
+
+      //Whenever For testing add json decoded
+      // var decode = json.decode(response.data);
       ArticleModel article = ArticleModel.fromJson(decode);
       return article;
     } else {
@@ -43,7 +46,9 @@ class ArticleRemoteDataSourceImpl implements ArticleRemoteDataSourceRepository {
     if (response.statusCode == 200) {
       final List<ArticleModel> _articles = [];
 
-      var decode = json.decode(response.data);
+      var decode = response.data;
+      //Whenever For testing add json decoded
+      // var decode = json.decode(response.data);
       for (var article in decode) {
         _articles.add(ArticleModel.fromJson(article));
       }
