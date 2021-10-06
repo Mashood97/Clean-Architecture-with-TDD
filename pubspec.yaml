@@ -39,9 +39,10 @@ dependencies:
   get:
   equatable:
   dartz:
-  connectivity_plus:
+  internet_connection_checker:
   dio:
   floor:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:

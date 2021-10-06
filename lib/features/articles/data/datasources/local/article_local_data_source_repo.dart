@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:flutter_api_clean_architecture/core/error/exceptions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../models/article_model.dart';
 
 abstract class ArticleLocalDataSourceRepository {
@@ -6,5 +11,42 @@ abstract class ArticleLocalDataSourceRepository {
   ///Throws a [CacheException] for all error codes
   Future<List<ArticleModel>> getAllArticlesFromLocal();
   Future<ArticleModel> getAllArticleByIdFromLocal(int? articleId);
-  Future<void> cacheAllArticles(List<ArticleModel> articles);
+  Future<void> cacheAllArticles(List<ArticleModel>? articles);
+}
+
+const String CACHED_ALL_ARTICLES = "CACHED_ALL_ARTICLES";
+
+class ArticleLocalDataSourceImpl extends ArticleLocalDataSourceRepository {
+  final SharedPreferences sharedPreferences;
+
+  ArticleLocalDataSourceImpl({required this.sharedPreferences});
+  @override
+  Future<void> cacheAllArticles(List<ArticleModel>? articles) async {
+    sharedPreferences.setString(
+      CACHED_ALL_ARTICLES,
+      json.encode(articles),
+    );
+  }
+
+  @override
+  Future<ArticleModel> getAllArticleByIdFromLocal(int? articleId) {
+    // TODO: implement getAllArticleByIdFromLocal
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<ArticleModel>> getAllArticlesFromLocal() {
+    final jsonString = sharedPreferences.getString('CACHED_ALL_ARTICLES');
+    if (jsonString != null) {
+      final List<ArticleModel> tArticlesList = [];
+      List<dynamic> decoded = json.decode(jsonString);
+      for (var article in decoded) {
+        tArticlesList.add(ArticleModel.fromJson(article));
+      }
+
+      return Future.value(tArticlesList);
+    } else {
+      throw CacheException();
+    }
+  }
 }
