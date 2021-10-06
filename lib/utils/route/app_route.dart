@@ -6,7 +6,7 @@ class PageConstant {
 }
 
 class AppRoute {
-  void navigateToSingleArticle(var arguments) {
+  static void navigateToSingleArticle(var arguments) {
     Get.toNamed(PageConstant.articleById, arguments: arguments);
   }
 }

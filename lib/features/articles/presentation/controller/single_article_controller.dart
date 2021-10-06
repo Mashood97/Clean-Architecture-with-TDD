@@ -2,22 +2,19 @@ import 'package:flutter_api_clean_architecture/features/articles/domain/usecases
 import 'package:flutter_api_clean_architecture/features/articles/domain/usecases/get_single_article_usecase.dart';
 import 'package:get/get.dart';
 
-class ArticleController extends GetxController {
+class SingleArticleController extends GetxController {
   GetArticlesUseCase? getArticlesUseCase;
   GetSingleArticleUseCase? getSingleArticleUseCase;
 
-  ArticleController({
+  SingleArticleController({
     required this.getArticlesUseCase,
     required this.getSingleArticleUseCase,
   });
+  // GetArticlesUseCase? getArticlesUseCase;
+  // GetSingleArticleUseCase? getSingleArticleUseCase;
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  // ArticleController({
+  //   required this.getArticlesUseCase,
+  //   required this.getSingleArticleUseCase,
+  // });
 }

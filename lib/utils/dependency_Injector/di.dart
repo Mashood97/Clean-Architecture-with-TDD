@@ -10,6 +10,7 @@ import 'package:flutter_api_clean_architecture/features/articles/domain/reposito
 import 'package:flutter_api_clean_architecture/features/articles/domain/usecases/get_articles_usecase.dart';
 import 'package:flutter_api_clean_architecture/features/articles/domain/usecases/get_single_article_usecase.dart';
 import 'package:flutter_api_clean_architecture/features/articles/presentation/controller/article_controller.dart';
+import 'package:flutter_api_clean_architecture/features/articles/presentation/controller/single_article_controller.dart';
 import 'package:get/instance_manager.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +21,11 @@ Future<void> initializeDependencies() async {
 //Fenix means permenantely available in memory to have instances
   Get.lazyPut<ArticleController>(
       () => ArticleController(
+          getArticlesUseCase: Get.find<GetArticlesUseCase>(),
+          getSingleArticleUseCase: Get.find<GetSingleArticleUseCase>()),
+      fenix: true);
+  Get.lazyPut<SingleArticleController>(
+      () => SingleArticleController(
           getArticlesUseCase: Get.find<GetArticlesUseCase>(),
           getSingleArticleUseCase: Get.find<GetSingleArticleUseCase>()),
       fenix: true);
