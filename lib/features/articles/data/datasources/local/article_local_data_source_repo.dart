@@ -30,8 +30,16 @@ class ArticleLocalDataSourceImpl extends ArticleLocalDataSourceRepository {
 
   @override
   Future<ArticleModel> getAllArticleByIdFromLocal(int? articleId) {
-    // TODO: implement getAllArticleByIdFromLocal
-    throw UnimplementedError();
+    final jsonString = sharedPreferences.getString('CACHED_ALL_ARTICLES');
+    if (jsonString != null) {
+      final articleList = json.decode(jsonString);
+      // final article =
+      //     articleList.firstWhere((element) => element['id'] == articleId!);
+
+      return Future.value(ArticleModel.fromJson(articleList));
+    } else {
+      throw CacheException();
+    }
   }
 
   @override

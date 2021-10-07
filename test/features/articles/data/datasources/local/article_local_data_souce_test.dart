@@ -58,7 +58,37 @@ void main() {
     });
   });
 
-  group("cache articles", () {
+  group("LocalDataSource", () {
+    final singleArticle =
+        ArticleModel.fromJson(json.decode(fixture('article.json')));
+    int tArticleId = 1;
+
+    test("Get Articles by Id from local souce", () async {
+      when(() => mockSharedPreferences.getString(any()))
+          .thenReturn(fixture('article.json'));
+
+      //act
+      final result = await articleLocalDataSourceImpl
+          .getAllArticleByIdFromLocal(tArticleId);
+
+      //assert
+      verify(() => mockSharedPreferences.getString("CACHED_ALL_ARTICLES"));
+      expect(result, equals(singleArticle));
+    });
+
+    test(
+        "Should return cache exception where there is not data present inside cache",
+        () async {
+      when(() => mockSharedPreferences.getString(any())).thenReturn(null);
+
+      final call = articleLocalDataSourceImpl.getAllArticleByIdFromLocal;
+
+      expect(
+          () => call(tArticleId), throwsA(const TypeMatcher<CacheException>()));
+    });
+  });
+
+  group("LocalDataSource", () {
     final List<ArticleModel> tArticlesList = [];
 
     tArticlesList.addAll([

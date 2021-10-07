@@ -9,7 +9,7 @@ class GetArticlesUseCase extends UseCase<List<Article>, NoParams> {
   GetArticlesUseCase({required this.articleRepository});
 
   @override
-  Future<Either<Failure, List<Article>>> call(NoParams params) async{
+  Future<Either<Failure, List<Article>>> call(NoParams params) async {
     return await articleRepository.getAllArticles();
   }
 }
