@@ -20,16 +20,30 @@ class PostView extends StatelessWidget {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : _postController.posts.isEmpty
-                  ? const Center(
-                      child: Text('No Data found'),
-                    )
-                  : ListView.builder(
-                      itemBuilder: (ctx, index) => Center(
-                        child: Text(_postController.posts[index].postBody),
+              : ListView.separated(
+                  separatorBuilder: (_, __) => const Divider(),
+                  itemBuilder: (ctx, index) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      title: Text(
+                        _postController.posts[index].postTitle,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20,
+                        ),
                       ),
-                      itemCount: _postController.posts.length,
+                      subtitle: Text(
+                        _postController.posts[index].postBody,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
                     ),
+                  ),
+                  itemCount: _postController.posts.length,
+                ),
         ),
       ),
     );
