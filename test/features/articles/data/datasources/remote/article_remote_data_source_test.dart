@@ -26,7 +26,9 @@ void main() {
         )).thenAnswer((_) async => Response(
           data: fixture(fileName),
           statusCode: 200,
-          requestOptions: RequestOptions(path: ''),
+          requestOptions: RequestOptions(
+            path: '',
+          ),
         ));
   }
 
@@ -36,7 +38,9 @@ void main() {
         )).thenAnswer((_) async => Response(
           data: 'something went wrong',
           statusCode: 404,
-          requestOptions: RequestOptions(path: ''),
+          requestOptions: RequestOptions(
+            path: '',
+          ),
         ));
   }
 
@@ -49,7 +53,7 @@ void main() {
     test("Should get all articles when get request is performed", () async {
       //arrange
 
-      getSuccessApi(fileName: 'articles.json');
+      await getSuccessApi(fileName: 'articles.json');
 
       //act
       final result = await articleRemoteDataSourceImpl.getAllArticles();
@@ -57,7 +61,7 @@ void main() {
 
       verify(
         () => dioClient.get(
-          'https://jsonplaceholder.typicode.com/todos',
+          'todos',
         ),
       );
 
@@ -65,7 +69,7 @@ void main() {
     });
 
     test("Should return failure Exception when api throw exception", () async {
-      getErrorApi();
+      await getErrorApi();
 
       final call = articleRemoteDataSourceImpl.getAllArticles;
 
@@ -79,7 +83,7 @@ void main() {
     int tArticleId = 1;
 
     test("Should get a single Article By Id ", () async {
-      getSuccessApi(fileName: 'article.json');
+      await getSuccessApi(fileName: 'article.json');
 
       //act
       final result =
@@ -88,7 +92,7 @@ void main() {
 
       verify(
         () => dioClient.get(
-          'https://jsonplaceholder.typicode.com/todos/$tArticleId',
+          'todos/$tArticleId',
         ),
       );
 
@@ -96,7 +100,7 @@ void main() {
     });
 
     test("Should return failure Exception when api throw exception", () async {
-      getErrorApi();
+      await getErrorApi();
 
       final call = articleRemoteDataSourceImpl.getAllArticleById;
 

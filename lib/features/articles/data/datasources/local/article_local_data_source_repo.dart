@@ -33,10 +33,10 @@ class ArticleLocalDataSourceImpl extends ArticleLocalDataSourceRepository {
     final jsonString = sharedPreferences.getString('CACHED_ALL_ARTICLES');
     if (jsonString != null) {
       final articleList = json.decode(jsonString);
-      final article =
-          articleList.firstWhere((element) => element['id'] == articleId!);
+      // final article =
+      //     articleList.firstWhere((element) => element['id'] == articleId!);
 
-      return Future.value(ArticleModel.fromJson(article));
+      return Future.value(ArticleModel.fromJson(articleList));
     } else {
       throw CacheException();
     }
