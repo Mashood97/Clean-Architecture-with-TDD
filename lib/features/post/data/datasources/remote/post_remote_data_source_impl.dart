@@ -4,7 +4,6 @@ import 'package:flutter_api_clean_architecture/features/post/data/models/post_mo
 import 'package:flutter_api_clean_architecture/utils/constant/api.dart';
 import 'package:flutter_api_clean_architecture/utils/networking/http_exception.dart';
 import 'package:flutter_api_clean_architecture/utils/networking/networking_handler.dart';
-import 'package:get/get_connect.dart';
 
 class PostRemoteDataSourceRepoImpl implements PostRemoteDataSource {
   final DioClient dioClient;
@@ -12,7 +11,7 @@ class PostRemoteDataSourceRepoImpl implements PostRemoteDataSource {
     required this.dioClient,
   });
   @override
-  Future<List<PostModel>> getPostsFromApi() async {
+  Future<List<PostModel>> getAllPosts() async {
     try {
       final response = await dioClient.get(Api.post);
       List<PostModel> _posts = [];

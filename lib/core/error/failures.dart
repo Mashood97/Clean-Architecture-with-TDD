@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_api_clean_architecture/utils/networking/http_exception.dart';
 
 abstract class Failure extends Equatable {
   final List? properties = const <dynamic>[];
@@ -12,3 +13,7 @@ abstract class Failure extends Equatable {
 class ServerFailure extends Failure {}
 
 class CacheFailure extends Failure {}
+
+class HttpFailure extends HttpException {
+  HttpFailure(String message) : super(message);
+}

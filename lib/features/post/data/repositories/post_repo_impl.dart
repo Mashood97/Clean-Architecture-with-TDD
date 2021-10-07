@@ -11,8 +11,8 @@ class PostRepoImpl implements PostRepository {
   @override
   Future<Either<HttpException, List<PostEntity>>> getPostsFromApi() async {
     try {
-      var posts = await postRemoteDataSource.getPostsFromApi();
-      return Right(posts as List<PostEntity>);
+      var posts = await postRemoteDataSource.getAllPosts();
+      return Right(posts);
     } on HttpException catch (e) {
       return Left(HttpException(e.message));
     }

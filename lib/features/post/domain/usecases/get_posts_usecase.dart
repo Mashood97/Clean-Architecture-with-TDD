@@ -8,6 +8,6 @@ class GetPostsUseCase extends UseCase<List<PostEntity>, NoParams> {
   final PostRepository postRepository;
   GetPostsUseCase({required this.postRepository});
   @override
-  Future<Either<HttpException, List<PostEntity>>> call(NoParams params) =>
-      postRepository.getPostsFromApi();
+  Future<Either<HttpException, List<PostEntity>>> call(NoParams params) async =>
+      await postRepository.getPostsFromApi();
 }
