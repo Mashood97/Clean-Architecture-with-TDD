@@ -14,9 +14,9 @@ class PostRemoteDataSourceRepoImpl implements PostRemoteDataSource {
   @override
   Future<List<PostModel>> getPostsFromApi() async {
     try {
-      Response response = await dioClient.get(Api.post);
+      final response = await dioClient.get(Api.post);
       List<PostModel> _posts = [];
-      for (var json in json.decode(response.body)) {
+      for (var json in response) {
         _posts.add(PostModel.fromJson(json));
       }
       return Future.value(_posts);
