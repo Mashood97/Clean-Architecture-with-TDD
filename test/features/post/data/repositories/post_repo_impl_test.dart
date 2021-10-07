@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_api_clean_architecture/core/error/failures.dart';
 import 'package:flutter_api_clean_architecture/features/post/data/datasources/remote/post_remote_data_source.dart';
 import 'package:flutter_api_clean_architecture/features/post/data/models/post_model.dart';
 import 'package:flutter_api_clean_architecture/features/post/data/repositories/post_repo_impl.dart';
@@ -61,8 +62,9 @@ void main() {
     test(
       "Should return server exception data when the call to remote data is unsuccess:",
       () async {
-        when(() => mockPostRemoteDataSource.getAllPosts())
-            .thenThrow(HttpException(''));
+        when(() => mockPostRemoteDataSource.getAllPosts()).thenThrow(
+          HttpException(e.message),
+        );
 
         final result = await postRepositoryImplementation.getPostsFromApi();
 
@@ -70,7 +72,7 @@ void main() {
         expect(
           result,
           equals(
-            Left(HttpException('')),
+            Left(HttpFailure(e.message)),
           ),
         );
       },

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_api_clean_architecture/core/error/failures.dart';
 import 'package:flutter_api_clean_architecture/features/post/domain/entities/post_entity.dart';
 import 'package:flutter_api_clean_architecture/features/post/domain/usecases/get_posts_usecase.dart';
 import 'package:flutter_api_clean_architecture/utils/networking/http_exception.dart';
@@ -24,16 +25,18 @@ class PostController extends GetxController {
   Future getAllPosts() async {
     setIsLoading(true);
 
-    final Either<HttpException, List<PostEntity>> response =
+    final Either<HttpFailure, List<PostEntity>> response =
         await postsUseCase.postRepository.getPostsFromApi();
-    response.fold((failure) => Get.snackbar("Error", failure.message),
-        (postList) {
+    response
+        .fold((failure) => Get.snackbar("Error", failure.message),
+            (postList) {
       _posts.addAll(postList);
     });
 
     setIsLoading(false);
   }
 
+ 
   @override
   void onInit() async {
     await getAllPosts();

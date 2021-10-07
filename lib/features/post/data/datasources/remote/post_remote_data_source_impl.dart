@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_api_clean_architecture/core/error/failures.dart';
 import 'package:flutter_api_clean_architecture/features/post/data/datasources/remote/post_remote_data_source.dart';
 import 'package:flutter_api_clean_architecture/features/post/data/models/post_model.dart';
 import 'package:flutter_api_clean_architecture/utils/constant/api.dart';

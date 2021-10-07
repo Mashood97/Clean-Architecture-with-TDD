@@ -14,6 +14,11 @@ class ServerFailure extends Failure {}
 
 class CacheFailure extends Failure {}
 
-class HttpFailure extends HttpException {
-  HttpFailure(String message) : super(message);
+class HttpFailure extends Failure implements HttpException {
+  final String messages;
+
+  HttpFailure(this.messages);
+  @override
+  // TODO: implement message
+  String get message => messages;
 }
