@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_api_clean_architecture/features/articles/presentation/controller/article_controller.dart';
-import 'package:flutter_api_clean_architecture/utils/route/app_route.dart';
 import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
+
+import '../../../../utils/route/app_route.dart';
+import '../controller/article_controller.dart';
 
 class ArticleView extends StatelessWidget {
   ArticleView({Key? key}) : super(key: key);

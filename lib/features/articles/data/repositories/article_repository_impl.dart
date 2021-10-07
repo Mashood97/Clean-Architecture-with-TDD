@@ -1,4 +1,4 @@
-import 'package:flutter_api_clean_architecture/core/error/exceptions.dart';
+import '../../../../core/error/exceptions.dart';
 
 import '../../../../core/platform/network_info.dart';
 import '../datasources/local/article_local_data_source_repo.dart';

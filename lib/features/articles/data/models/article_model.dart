@@ -1,4 +1,4 @@
-import 'package:flutter_api_clean_architecture/features/articles/domain/entities/article.dart';
+import '../../domain/entities/article.dart';
 
 class ArticleModel extends Article {
   const ArticleModel({

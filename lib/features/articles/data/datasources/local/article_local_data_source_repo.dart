@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_api_clean_architecture/core/error/exceptions.dart';
+import '../../../../../core/error/exceptions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/article_model.dart';

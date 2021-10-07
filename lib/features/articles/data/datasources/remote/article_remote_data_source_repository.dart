@@ -1,9 +1,7 @@
-import 'dart:convert';
-
-import 'package:flutter_api_clean_architecture/core/error/exceptions.dart';
-
-import '../../models/article_model.dart';
 import 'package:dio/dio.dart';
+
+import '../../../../../core/error/exceptions.dart';
+import '../../models/article_model.dart';
 
 abstract class ArticleRemoteDataSourceRepository {
   /// Calls the https://jsonplaceholder.typicode.com/{todos} endpoint
@@ -24,10 +22,10 @@ class ArticleRemoteDataSourceImpl implements ArticleRemoteDataSourceRepository {
         options: Options(contentType: 'application/json'));
 
     if (response.statusCode == 200) {
-      // var decode = response.data;
+      var decode = response.data;
 
       //Whenever For testing add json decoded
-      var decode = json.decode(response.data);
+      // var decode = json.decode(response.data);
       ArticleModel article = ArticleModel.fromJson(decode);
       return article;
     } else {
