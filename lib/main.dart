@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_api_clean_architecture/features/articles/presentation/pages/article_view.dart';
-import 'package:flutter_api_clean_architecture/utils/route/app_route.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/route_manager.dart';
 
+import 'features/articles/presentation/pages/article_view.dart';
 import 'features/articles/presentation/pages/single_article_view.dart';
-import './utils/dependency_Injector/di.dart' as di;
+import 'features/post/presentation/pages/post_view.dart';
+import 'utils/dependency_Injector/di.dart' as di;
+import 'utils/route/app_route.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: PageConstant.articles,
+      // initialRoute: PageConstant.articles,
+      home: PostView(),
       getPages: [
         GetPage(
           name: PageConstant.articles,

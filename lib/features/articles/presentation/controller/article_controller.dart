@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_api_clean_architecture/core/error/failures.dart';
-import 'package:flutter_api_clean_architecture/features/articles/domain/entities/article.dart';
-import 'package:flutter_api_clean_architecture/features/articles/domain/usecases/get_articles_usecase.dart';
-import 'package:flutter_api_clean_architecture/features/articles/domain/usecases/get_single_article_usecase.dart';
+import '../../../../core/error/failures.dart';
+import '../../domain/entities/article.dart';
+import '../../domain/usecases/get_articles_usecase.dart';
+import '../../domain/usecases/get_single_article_usecase.dart';
 import 'package:get/get.dart';
 
 const String SERVER_FAILURE_MESSAGE = 'Server Failure';

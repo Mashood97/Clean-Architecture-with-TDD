@@ -61,7 +61,7 @@ void main() {
 
       verify(
         () => dioClient.get(
-          'todos',
+          'https://jsonplaceholder.typicode.com/todos',
         ),
       );
 
@@ -92,7 +92,7 @@ void main() {
 
       verify(
         () => dioClient.get(
-          'todos/$tArticleId',
+          'https://jsonplaceholder.typicode.com/todos/$tArticleId',
         ),
       );
 

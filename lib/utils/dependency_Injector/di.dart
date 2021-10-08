@@ -11,6 +11,14 @@ import 'package:flutter_api_clean_architecture/features/articles/domain/usecases
 import 'package:flutter_api_clean_architecture/features/articles/domain/usecases/get_single_article_usecase.dart';
 import 'package:flutter_api_clean_architecture/features/articles/presentation/controller/article_controller.dart';
 import 'package:flutter_api_clean_architecture/features/articles/presentation/controller/single_article_controller.dart';
+import 'package:flutter_api_clean_architecture/features/post/data/datasources/remote/post_remote_data_source.dart';
+import 'package:flutter_api_clean_architecture/features/post/data/repositories/post_repo_impl.dart';
+import 'package:flutter_api_clean_architecture/features/post/domain/repositories/post_repository.dart';
+import 'package:flutter_api_clean_architecture/features/post/domain/usecases/get_posts_usecase.dart';
+import 'package:flutter_api_clean_architecture/features/post/presentation/controller/post_controller.dart';
+import 'package:flutter_api_clean_architecture/utils/networking/client.dart';
+
+import 'package:flutter_api_clean_architecture/utils/networking/networking_handler.dart';
 import 'package:get/instance_manager.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,11 +37,20 @@ Future<void> initializeDependencies() async {
           getArticlesUseCase: Get.find<GetArticlesUseCase>(),
           getSingleArticleUseCase: Get.find<GetSingleArticleUseCase>()),
       fenix: true);
+
+  Get.lazyPut<PostController>(
+      () => PostController(
+            postUseCase: Get.find<GetPostUseCase>(),
+          ),
+      fenix: true);
 //---------------USE CASES-------------
   Get.lazyPut<GetArticlesUseCase>(() =>
       GetArticlesUseCase(articleRepository: Get.find<ArticleRepository>()));
   Get.lazyPut<GetSingleArticleUseCase>(() => GetSingleArticleUseCase(
       articleRepository: Get.find<ArticleRepository>()));
+
+  Get.lazyPut<GetPostUseCase>(
+      () => GetPostUseCase(postRepository: Get.find<PostRepository>()));
 
 //---------------Repositories-------------
 
@@ -42,6 +59,13 @@ Future<void> initializeDependencies() async {
       localSource: Get.find<ArticleLocalDataSourceRepository>(),
       networkInfo: Get.find<NetworkInfo>(),
       remoteSource: Get.find<ArticleRemoteDataSourceRepository>(),
+    ),
+  );
+
+  Get.lazyPut<PostRepository>(
+    () => PostRepoImpl(
+      postRemoteDataSourceRepository:
+          Get.find<PostRemoteDataSourceRepository>(),
     ),
   );
 
@@ -56,6 +80,11 @@ Future<void> initializeDependencies() async {
     () => ArticleRemoteDataSourceImpl(dio: Get.find<Dio>()),
   );
 
+  Get.lazyPut<PostRemoteDataSourceRepository>(
+    () => PostRemoteDataSourceRepositoryImplementation(
+        dio: Get.find<NetworkClient>()),
+  );
+
 //External packages: (Firebase,Connectivity or Internet connection checker etc).
 
   Get.lazyPut<NetworkInfo>(
@@ -67,6 +96,8 @@ Future<void> initializeDependencies() async {
   final pref = await SharedPreferences.getInstance();
 
   Get.lazyPut<SharedPreferences>(() => pref);
+  Get.lazyPut<DioClient>(() => DioClient(Get.find<Dio>()));
+  Get.lazyPut<NetworkClient>(() => NetworkClient(Get.find<Dio>()));
 
   Get.lazyPut<Dio>(() => Dio());
   Get.lazyPut<InternetConnectionChecker>(() => InternetConnectionChecker());
