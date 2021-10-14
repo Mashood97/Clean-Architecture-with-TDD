@@ -12,19 +12,15 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   bool get isActive => _isActive.value;
 
-  late Rx<Timer> _timer;
-
-  Timer get timer => _timer.value;
-
   RxInt _counter = 0.obs;
 
   int get counter => _counter.value;
 
   //List for binding stream of geo locator live position
-  Rx<Position>? _postionsList;
+  Rx<Position>? _positionStream;
 
-  Position? get positionList =>
-      _postionsList != null ? _postionsList!.value : null;
+  Position? get positionStream =>
+      _positionStream != null ? _positionStream!.value : null;
 
   //Google map controller
   Rx<GoogleMapController>? _googleMapController;
@@ -95,11 +91,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       Rx<LatLng>(const LatLng(24.85871738270853, 67.06132739779827));
 
   LatLng get destinationPoint => _destinationPoint!.value;
-
-  //This will add new lat lng always for live tracking
-  final RxList<LatLng> _getLiveLocation = RxList();
-
-  List<LatLng> get liveLocationTracking => [..._getLiveLocation];
 
   //This will be use for creating polylines on google map.
   Rx<PolylinePoints>? _polylinePoints;
@@ -175,7 +166,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       "assets/images/user_pin.png",
     );
 
-    _userMarkerIcon = Rx<BitmapDescriptor>(icon);
+    return icon;
   }
 
   //Distance Calculation for a trip
@@ -198,7 +189,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   @override
   void onInit() async {
     _userLocation = Rx<Position>(await Geolocator.getCurrentPosition());
-    _postionsList = Rx<Position>(_userLocation!.value);
+    _positionStream = Rx<Position>(_userLocation!.value);
 
     _cameraPosition = Rx<CameraPosition>(
       CameraPosition(
@@ -211,7 +202,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     );
 
     //Get custom icon for marker of user
-    await getIcons();
+    var icon = await getIcons();
+
+    _userMarkerIcon = Rx<BitmapDescriptor>(icon);
 
     //Set markers for origin and destination
     _destinationMarker = Rx<Marker>(
@@ -237,8 +230,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         infoWindow: const InfoWindow(title: 'User'),
         icon: _userMarkerIcon!.value,
         position: LatLng(
-          _userLocation!.value.latitude,
-          _userLocation!.value.longitude,
+          _positionStream!.value.latitude,
+          _positionStream!.value.longitude,
         ),
       ),
     );
@@ -252,55 +245,58 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       destinationLongitude: _destinationPoint!.value.longitude,
     );
 
-    await getTotalTimeDuration(
-      startLatitude: _userLocation!.value.latitude,
-      startLongitude: _userLocation!.value.longitude,
-      destinationLatitude: _destinationPoint!.value.latitude,
-      destinationLongitude: _destinationPoint!.value.longitude,
-    );
+    // await getTotalTimeDuration(
+    //   startLatitude: _userLocation!.value.latitude,
+    //   startLongitude: _userLocation!.value.longitude,
+    //   destinationLatitude: _destinationPoint!.value.latitude,
+    //   destinationLongitude: _destinationPoint!.value.longitude,
+    // );
+
+    if (_isActive.value) {
+      // _counter++;
+      _positionStream!.bindStream(Geolocator.getPositionStream());
+
+      _positionStream!.stream.listen((position) async {
+        //_userMarker
+
+        var icon = await getIcons();
+
+        if (_userMarkerIcon != null) {
+          _userMarker!.value = Marker(
+            markerId: const MarkerId('User'),
+            infoWindow: const InfoWindow(title: 'User'),
+            icon: icon,
+            position: LatLng(
+              _positionStream!.value.latitude,
+              _positionStream!.value.longitude,
+            ),
+          );
+        }
+
+        _cameraPosition!.value = CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 15.0,
+        );
+
+        _googleMapController!.value.animateCamera(
+          CameraUpdate.newCameraPosition(_cameraPosition!.value),
+        );
+
+        debugPrint("value of latitude is: ${position.latitude}");
+
+        //To get live update of trip duration and destination use api again and again
+        // await getTotalTimeDuration(
+        //   startLatitude: position.latitude,
+        //   startLongitude: position.longitude,
+        //   destinationLatitude: _destinationPoint!.value.latitude,
+        //   destinationLongitude: _destinationPoint!.value.longitude,
+        // );
+      }, onError: (error) {
+        Get.snackbar("Error", error.toString());
+      });
+    }
     WidgetsBinding.instance!.addObserver(this);
-    _timer = Rx<Timer>(
-      Timer.periodic(
-        const Duration(seconds: 1),
-        (timer) {
-          if (_isActive.value) {
-            _counter++;
-            _postionsList!.bindStream(Geolocator.getPositionStream());
 
-            _postionsList!.stream.listen((position) async {
-              _getLiveLocation.add(
-                LatLng(position.latitude, position.longitude),
-              );
-
-              //_userMarker
-              _userMarker!.value = Marker(
-                markerId: const MarkerId('User'),
-                infoWindow: const InfoWindow(title: 'User'),
-                icon: _userMarkerIcon!.value,
-                position: LatLng(position.latitude, position.longitude),
-              );
-
-              _cameraPosition!.value = CameraPosition(
-                target: LatLng(position.latitude, position.longitude),
-                zoom: 15.0,
-              );
-
-              _googleMapController!.value.animateCamera(
-                CameraUpdate.newCameraPosition(_cameraPosition!.value),
-              );
-
-              //To get live update of trip duration and destination use api again and again
-              // await getTotalTimeDuration(
-              //   startLatitude: position.latitude,
-              //   startLongitude: position.longitude,
-              //   destinationLatitude: _destinationPoint!.value.latitude,
-              //   destinationLongitude: _destinationPoint!.value.longitude,
-              // );
-            });
-          }
-        },
-      ),
-    );
     super.onInit();
   }
 
@@ -322,9 +318,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   @override
   void onClose() {
-    _timer.close();
-    _timer.value.cancel();
-    _postionsList!.close();
+    _positionStream!.close();
     _googleMapController!.value.dispose();
     WidgetsBinding.instance!.removeObserver(this);
 
