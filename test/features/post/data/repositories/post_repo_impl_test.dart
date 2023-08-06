@@ -4,8 +4,7 @@ import 'package:flutter_api_clean_architecture/features/post/data/datasources/re
 import 'package:flutter_api_clean_architecture/features/post/data/models/post_model.dart';
 import 'package:flutter_api_clean_architecture/features/post/data/repositories/post_repo_impl.dart';
 import 'package:flutter_api_clean_architecture/features/post/domain/entities/post_entity.dart';
-import 'package:flutter_api_clean_architecture/utils/networking/http_exception.dart';
-import 'package:flutter_api_clean_architecture/utils/networking/networking_handler.dart';
+import 'package:flutter_api_clean_architecture/utils/chopper_client/exception/response_error.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -40,7 +39,7 @@ void main() {
     ];
     List<PostEntity> postEntity = posts;
 
-    HttpException e = HttpException(kServerError);
+    ResponseError e = ResponseError(errorStatus: "Error");
 
     test(
       "Should return remote data when the call to remote data is success:",
@@ -63,7 +62,7 @@ void main() {
       "Should return server exception data when the call to remote data is unsuccess:",
       () async {
         when(() => mockPostRemoteDataSource.getAllPosts()).thenThrow(
-          HttpException(e.message),
+          ResponseError(errorStatus: e.errorStatus),
         );
 
         final result = await postRepositoryImplementation.getPostsFromApi();
@@ -72,7 +71,7 @@ void main() {
         expect(
           result,
           equals(
-            Left(HttpFailure(e.message)),
+            Left(ResponseError(errorStatus:e.errorStatus)),
           ),
         );
       },

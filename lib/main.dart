@@ -5,6 +5,7 @@ import 'package:get/route_manager.dart';
 
 import 'features/articles/presentation/pages/article_view.dart';
 import 'features/articles/presentation/pages/single_article_view.dart';
+import 'utils/chopper_client/chopper_client.dart';
 import 'utils/dependency_Injector/di.dart' as di;
 import 'utils/route/app_route.dart';
 
@@ -12,6 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await di.initializeDependencies();
+  ChopperClientInstance.initializeChopperClient();
   runApp(const MyApp());
 }
 

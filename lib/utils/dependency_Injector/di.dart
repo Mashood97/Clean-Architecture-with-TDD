@@ -17,7 +17,6 @@ import 'package:flutter_api_clean_architecture/features/post/data/repositories/p
 import 'package:flutter_api_clean_architecture/features/post/domain/repositories/post_repository.dart';
 import 'package:flutter_api_clean_architecture/features/post/domain/usecases/get_posts_usecase.dart';
 import 'package:flutter_api_clean_architecture/features/post/presentation/controller/post_controller.dart';
-import 'package:flutter_api_clean_architecture/utils/networking/networking_handler.dart';
 import 'package:get/instance_manager.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,7 +78,7 @@ Future<void> initializeDependencies() async {
   );
 
   Get.lazyPut<PostRemoteDataSource>(
-    () => PostRemoteDataSourceRepoImpl(dioClient: Get.find<DioClient>()),
+    () => PostRemoteDataSourceRepoImpl(),
   );
 
 //External packages: (Firebase,Connectivity or Internet connection checker etc).
@@ -93,8 +92,7 @@ Future<void> initializeDependencies() async {
   final pref = await SharedPreferences.getInstance();
 
   Get.lazyPut<SharedPreferences>(() => pref);
-  Get.lazyPut<DioClient>(() => DioClient(Get.find<Dio>()));
 
-  Get.lazyPut<Dio>(() => Dio());
+
   Get.lazyPut<InternetConnectionChecker>(() => InternetConnectionChecker());
 }

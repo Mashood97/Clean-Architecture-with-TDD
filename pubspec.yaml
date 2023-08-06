@@ -43,10 +43,10 @@ dependencies:
   dio:
   floor:
   shared_preferences:
-  geolocator:
-  google_maps_flutter: ^2.0.11
-  flutter_polyline_points: ^1.0.0
-  flutter_animarker: ^3.2.0
+  chopper: ^6.1.1
+  freezed:
+  freezed_annotation:
+  json_annotation:
 
 
 dev_dependencies:
@@ -55,6 +55,8 @@ dev_dependencies:
   floor_generator:
   build_runner:
   mocktail: ^0.1.4
+  chopper_generator:
+  json_serializable:
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
